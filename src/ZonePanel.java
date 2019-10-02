@@ -96,7 +96,7 @@ public class ZonePanel extends JPanel implements MouseListener{
 		Graphics g = image.getGraphics();
 		this.paint(g);
 		 try {
-		        ImageIO.write(image, "png", new File(filename + "/" + filename + "_zone_"));
+		        ImageIO.write(image, "png", new File(filename + "/" + filename));
 		    } catch (IOException e) {
 		        System.out.println("Error saving zone image");
 		   }
