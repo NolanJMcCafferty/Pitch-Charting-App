@@ -4,4 +4,4 @@ This is a Java applet to chart pitches, for use by the Pomona-Pitzer baseball te
 
 Now, the data is available in CSV form and and an image of the chart is created as well. 
 
-![pitch charting applet](https://github.com/NolanJMcCafferty/Pitch-Charting-App/pitchChart.png)
+![pitch charting applet](https://github.com/NolanJMcCafferty/Pitch-Charting-App/blob/master/pitchChart.png)
