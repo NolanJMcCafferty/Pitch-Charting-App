@@ -85,7 +85,7 @@ public class ZonePanel extends JPanel implements MouseListener{
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM-dd-yyyy");  
 		String date = dtf.format(LocalDateTime.now());  
 	 	String filename = String.join(" ", pitcherName, date).replaceAll(" ", "_");
-	 	new File(filename).mkdir();
+	 	new File("../" + filename).mkdir();
 		this.saveZoneImage(filename);
 		this.savePitchesCSV(filename);
 	 	
@@ -96,7 +96,7 @@ public class ZonePanel extends JPanel implements MouseListener{
 		Graphics g = image.getGraphics();
 		this.paint(g);
 		 try {
-		        ImageIO.write(image, "png", new File(filename + "/" + filename));
+		        ImageIO.write(image, "png", new File("../" + filename + "/" + filename));
 		    } catch (IOException e) {
 		        System.out.println("Error saving zone image");
 		   }
@@ -104,7 +104,7 @@ public class ZonePanel extends JPanel implements MouseListener{
 	
 	public void savePitchesCSV(String filename) {
 		try {
-			PrintWriter outputFile = new PrintWriter(new FileWriter(filename + "/" + filename + ".csv"));
+			PrintWriter outputFile = new PrintWriter(new FileWriter("../" + filename + "/" + filename + ".csv"));
 			outputFile.println(String.join(",", csvHeaders));
 			for (Pitch pitch : pitches) {
 				outputFile.println(pitch.csvRow());
