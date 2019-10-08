@@ -38,6 +38,9 @@ public class Pitch {
 		return swing;
 	}
 	
+	/* method to output the pitch 
+	 * as a row in a csv file
+	 */
 	public String csvRow() {
 		return String.join(
 			",", 

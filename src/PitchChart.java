@@ -12,7 +12,9 @@ public class PitchChart implements ActionListener{
 	private static final int FRAME_WIDTH = 900;
 	private static final int PANEL_WIDTH = 250;
 	private static final int PITCH_LIST_HEIGHT = 350;
-	private static final int NAME_SIZE = 12;
+	private static final int PITCH_LIST_WIDTH = PANEL_WIDTH - 20;
+	private static final int PITCH_LIST_PANEL_HEIGHT = PITCH_LIST_HEIGHT + 50;
+	private static final int FONT_SIZE = 12;
 	private static final String INFO_DIV = "  |  ";
 	private ZonePanel zone;
 	private int pitchCount = 0;
@@ -23,13 +25,14 @@ public class PitchChart implements ActionListener{
 	private JLabel pitchesLabel, submitLabel;
 	
 	public PitchChart() {
-		//Creating the Frame
         JFrame frame = new JFrame("Pitch Chart");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 
+        // center panel for strike zone display
         zone = new ZonePanel();
 
+        // right panel for pitch chart info
         JPanel infoPanel = new JPanel();
         infoPanel.setPreferredSize(new Dimension(PANEL_WIDTH, FRAME_HEIGHT));
         infoPanel.setBackground(Color.lightGray);
@@ -39,7 +42,7 @@ public class PitchChart implements ActionListener{
         
         // top panel for pitcher name
         JLabel nameLabel = new JLabel("Name");
-        pitcherName = new JTextField(NAME_SIZE);
+        pitcherName = new JTextField(FONT_SIZE);
         namePanel.add(nameLabel);
         namePanel.add(pitcherName);
         namePanel.setBorder(new EmptyBorder(20, 10, 0, 10));
@@ -49,21 +52,21 @@ public class PitchChart implements ActionListener{
         JPanel pitchListPanel = new JPanel();
         pitchListPanel.setBackground(Color.lightGray);
         pitchListPanel.setBorder(new EmptyBorder(20, 10, 20, 10));
-        pitchListPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PITCH_LIST_HEIGHT + 50));
+        pitchListPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PITCH_LIST_PANEL_HEIGHT));
         
         pitchesLabel = new JLabel("Pitches: " + pitchCount);
         pitchListPanel.add(pitchesLabel, BorderLayout.NORTH);
         
         JScrollPane pitchesPane = new JScrollPane(pitchList);
-        pitchesPane.setPreferredSize(new Dimension(PANEL_WIDTH - 20, PITCH_LIST_HEIGHT));
+        pitchesPane.setPreferredSize(new Dimension(PITCH_LIST_WIDTH, PITCH_LIST_HEIGHT));
         pitchListPanel.add(pitchesPane, BorderLayout.SOUTH);
-        pitchList.setFont(new Font("monospaced", Font.PLAIN, 12));
+        pitchList.setFont(new Font("monospaced", Font.PLAIN, FONT_SIZE));
         
         
         // panel to add new pitch
         JPanel addPitchPanel = new JPanel();
         addPitchPanel.setBackground(Color.lightGray);
-        addPitchPanel.setPreferredSize(new Dimension(PANEL_WIDTH, 130));
+        addPitchPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_WIDTH / 2));
 
         
         // pitch type field
@@ -80,7 +83,6 @@ public class PitchChart implements ActionListener{
         addPitchPanel.add(velocityLabel);
         addPitchPanel.add(velocityField);
         
-        // pitch info radio buttons
         JPanel pitchInfoButtons = new JPanel(new GridLayout(2,2));
         pitchInfoButtons.setBackground(Color.lightGray);   
         pitchInfoButtons.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -109,7 +111,7 @@ public class PitchChart implements ActionListener{
         addPitch.addActionListener(this);
         addPitchPanel.add(addPitch);
         
-        // submit panel
+        // panel for submit and reset buttons
         JPanel submitPanel = new JPanel();
         submitPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_WIDTH));
         submitPanel.setBackground(Color.lightGray);
@@ -124,17 +126,21 @@ public class PitchChart implements ActionListener{
         submitLabel = new JLabel();
         submitPanel.add(submitLabel, BorderLayout.SOUTH);
         
+        // add components to pitch info panel
         infoPanel.add(namePanel);
         infoPanel.add(pitchListPanel);
         infoPanel.add(addPitchPanel);
         infoPanel.add(submitPanel);
 
-        //Adding Components to the frame.
+        // add components to the frame.
         frame.getContentPane().add(BorderLayout.CENTER, zone);
         frame.getContentPane().add(BorderLayout.EAST, infoPanel);
         frame.setVisible(true);
 	}
 	
+	/* create string of pitch characteristics
+	 * and add it to the pitch list
+	 */
 	public void addPitchToList(int velocity, boolean isStrike, int pitchNum) {
 		String pitchCall = isStrike ? "strike" : "ball";
 		String pitchSpacing = pitchCount > 9 ? ". " : ".  ";
@@ -145,6 +151,7 @@ public class PitchChart implements ActionListener{
 	}
 	
 	public String getPitchType(int pitchNum) {
+		// convert pitch type number to pitch type string
 		switch (pitchNum) {
 		case 1:
 			return "fastball";
@@ -161,6 +168,9 @@ public class PitchChart implements ActionListener{
 		}
 	}
 	
+	/* reset the pitch chart by removing the pitch
+	 * list and the pitches on the zone
+	 */
 	public void resetChart() {
 		pitchCount = 0;
 		pitches = new Vector<String>();
@@ -169,13 +179,16 @@ public class PitchChart implements ActionListener{
 		zone.resetZone();
 	}
 	
+	/* method to check if a pitch can be added
+	 * checks that there is a velocity, pitch type, and a
+	 * location is chosen
+	 */
 	public boolean pitchCanBeAdded() {
 		return pitchTypeField.getText().matches("\\d+") && 
 				velocityField.getText().matches("\\d+") && 
 				zone.isLocationChosen();
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand() == "Reset") {
 			this.resetChart();

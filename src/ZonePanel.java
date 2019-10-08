@@ -33,6 +33,7 @@ public class ZonePanel extends JPanel implements MouseListener{
 		addMouseListener(this);
 		pitches = new ArrayList<Pitch>();
 	}
+
 	public void paintComponent(Graphics g) {
 	      super.paintComponent(g);
 	      Graphics2D canvas = (Graphics2D) g;  
@@ -43,11 +44,13 @@ public class ZonePanel extends JPanel implements MouseListener{
 	      canvas.drawRect(ZONE_LEFT, ZONE_TOP, ZONE_WIDTH, ZONE_HEIGHT);    
 	      canvas.drawPolygon(plateCornersX, plateCornersY, plateCornersX.length); 
 	      
+	      // mark the chosen location with a grey circle
 	      if (locationChosen) {
     		  canvas.setColor(Color.lightGray);
  	    	  canvas.fillOval(x - BALL_OFFSET, y - BALL_OFFSET, BALL_RADIUS, BALL_RADIUS);
 	      }
 	      
+	      // display all the pitches in the pitch chart on the zone
 	      for (Pitch pitch : pitches) {
 	    	  Color pitchColor = pitch.isStrike() ? Color.green : Color.red;
 	    	  canvas.setColor(pitchColor);
@@ -68,22 +71,31 @@ public class ZonePanel extends JPanel implements MouseListener{
 	    repaint();
 	}
 	
+	/* method to add a pitch to the list of pitches
+	 * to display on the zone
+	 */
 	public void addPitch(int pitchNo, int v, int type, boolean isStrike, boolean swing) {
 		pitches.add(new Pitch(pitchNo, x, y, v, type, isStrike, swing));
 		locationChosen = false;
 		repaint();
 	}
 	
+	// method to reset the zone with an empty pitch list
 	public void resetZone() {
 		pitches = new ArrayList<Pitch>();
 		locationChosen = false;
 		repaint();
 	}
 	
+	/* method to save the current pitch chart
+	 * as both a png image of the zone and
+	 * a csv file of the pitches
+	 */ 
 	public void saveZone(String pitcherName) {
 		// get today's date
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM-dd-yyyy");  
 		String date = dtf.format(LocalDateTime.now());  
+
 	 	String filename = String.join(" ", pitcherName, date).replaceAll(" ", "_");
 	 	new File("../" + filename).mkdir();
 		this.saveZoneImage(filename);
@@ -91,6 +103,7 @@ public class ZonePanel extends JPanel implements MouseListener{
 	 	
 	}
 	
+	// save the zone image
 	public void saveZoneImage(String filename) {
 		BufferedImage image = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = image.getGraphics();
@@ -102,6 +115,7 @@ public class ZonePanel extends JPanel implements MouseListener{
 		   }
 	}
 	
+	// save the pitches as a csv file
 	public void savePitchesCSV(String filename) {
 		try {
 			PrintWriter outputFile = new PrintWriter(new FileWriter("../" + filename + "/" + filename + ".csv"));
