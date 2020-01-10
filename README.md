@@ -6,4 +6,4 @@ Now, the data is available in CSV form and and an image of the chart is created 
 
 ![pitch charting applet](https://github.com/NolanJMcCafferty/Pitch-Charting-App/blob/master/pitchChart.png)
 
-To use the pitch charting applet, clone this repository and navigate to the src directory. Then, using the command line, run ``javac PitchChart.java`` and ``java PitchChart.java``.
+To use the pitch charting applet, clone this repository and navigate to the src directory. Then, using the command line, run ``javac PitchChart.java`` and ``java PitchChart``.
