@@ -72,12 +72,18 @@ public class ZonePanel extends JPanel implements MouseListener{
 	    repaint();
 	}
 	
-	/* method to add a pitch to the list of pitches
-	 * to display on the zone
+	/* add a pitch to the list of pitches to display on the zone
 	 */
 	public void addPitch(int pitchNo, int v, int type, boolean isStrike, boolean swing) {
 		pitches.add(new Pitch(pitchNo, x, y, v, type, isStrike, swing));
 		locationChosen = false;
+		repaint();
+	}
+
+	/* remove the last pitch added from the zone
+	 */
+	public void removePitch() {
+		pitches.remove(pitches.size() - 1);
 		repaint();
 	}
 	
