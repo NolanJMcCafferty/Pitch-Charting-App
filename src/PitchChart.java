@@ -184,7 +184,18 @@ public class PitchChart implements ActionListener{
 		pitches.add(0, pitchInfo);
 		pitchList.setListData(pitches);
 	}
-	
+
+	/* show pop-up window to confirm that the user
+ 	 * wants to reset the pitch chart
+	 */
+	public boolean confirmReset() {
+		Integer result = JOptionPane.showConfirmDialog(
+				null,
+				"Are you sure you want to reset this chart?"
+		);
+		return result == 0;
+	}
+
 	/* reset the pitch chart by removing the pitch
 	 * list and the pitches on the zone
 	 */
@@ -215,7 +226,7 @@ public class PitchChart implements ActionListener{
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("Reset")) {
+		if (e.getActionCommand().equals("Reset") && this.confirmReset()) {
 			this.resetChart();
 			submitLabel.setText("");
 		}
