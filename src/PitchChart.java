@@ -144,6 +144,11 @@ public class PitchChart implements ActionListener{
         JButton addPitch = new JButton("Add Pitch");
         addPitch.addActionListener(this);
         addPitchPanel.add(addPitch);
+
+        // remove last pitch button
+		JButton removeLastPitch = new JButton("Remove Last");
+		removeLastPitch.addActionListener(this);
+		addPitchPanel.add(removeLastPitch);
         
         // panel for submit and reset buttons
         JPanel submitPanel = new JPanel();
@@ -184,7 +189,29 @@ public class PitchChart implements ActionListener{
 		pitches.add(0, pitchInfo);
 		pitchList.setListData(pitches);
 	}
-	
+
+	/* remove the last pitch that was added to the pitch list
+	 */
+	public void removeLastPitch() {
+		if (pitches.size() > 0) {
+			pitchCount--;
+			pitches.remove(0);
+			pitchList.setListData(pitches);
+			zone.removePitch();
+		}
+	}
+
+	/* show pop-up window to confirm that the user
+ 	 * wants to reset the pitch chart
+	 */
+	public boolean confirmReset() {
+		Integer result = JOptionPane.showConfirmDialog(
+				null,
+				"Are you sure you want to reset this chart?"
+		);
+		return result == 0;
+	}
+
 	/* reset the pitch chart by removing the pitch
 	 * list and the pitches on the zone
 	 */
@@ -215,19 +242,17 @@ public class PitchChart implements ActionListener{
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("Reset")) {
+		if (e.getActionCommand().equals("Reset") && this.confirmReset()) {
 			this.resetChart();
 			submitLabel.setText("");
-		}
-		else if (e.getActionCommand().equals("Submit") && !this.missingInnings()) {
+		} else if (e.getActionCommand().equals("Submit") && !this.missingInnings()) {
 			String[] split_name = pitcherName.getText().split(" ");
 			String last_name = split_name[split_name.length - 1];
 
 			String innings_pitched = startInning.getText() + "-" + endInning.getText();
 			zone.saveZone(last_name + "_" + innings_pitched);
 			submitLabel.setText("chart submitted");
-		}
-		else if (e.getActionCommand().equals("Add Pitch") && this.pitchCanBeAdded()) {
+		} else if (e.getActionCommand().equals("Add Pitch") && this.pitchCanBeAdded()) {
 			//increase pitch count
 			pitchCount++;
 			
@@ -241,7 +266,9 @@ public class PitchChart implements ActionListener{
 			
 			// add pitch to pitch list
 			this.addPitchToList(velocity, isStrike, pitchType);
-		}	
+		} else if (e.getActionCommand().equals("Remove Last")) {
+			this.removeLastPitch();
+		}
 		
 		pitchesLabel.setText("Pitches: " + pitchCount);
 	}
