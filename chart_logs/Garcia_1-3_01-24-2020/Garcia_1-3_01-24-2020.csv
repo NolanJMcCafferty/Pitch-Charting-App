@@ -1,0 +1,8 @@
+pitch#,type,locationX,locationY,velocity,strike,swing
+1,1,315,534,83,false,false
+2,1,287,297,82,true,true
+3,1,212,389,82,true,true
+4,4,156,313,75,true,true
+5,1,394,265,82,true,true
+6,4,452,203,75,false,false
+7,1,208,135,82,false,true
